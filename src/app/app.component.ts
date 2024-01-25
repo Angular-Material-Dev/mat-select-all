@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatOption, MatOptionSelectionChange } from '@angular/material/core';
 import { JsonPipe } from '@angular/common';
+import { SelectAllDirective } from './shared/directives/select-all.directive';
 
 interface Pokemon {
   value: string;
@@ -27,12 +27,12 @@ interface PokemonGroup {
     ReactiveFormsModule,
     MatInputModule,
     JsonPipe,
+    SelectAllDirective,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  toppings = new FormControl<string[] | undefined>([]);
   toppingList: string[] = [
     'Extra cheese',
     'Mushroom',
@@ -41,8 +41,7 @@ export class AppComponent {
     'Sausage',
     'Tomato',
   ];
-  @ViewChild('selectAll') selectAll: MatOption | undefined;
-  @ViewChild('selectAllPokemon') selectAllPokemon: MatOption | undefined;
+  toppings = new FormControl<string[] | undefined>([]);
 
   pokemonControl = new FormControl<string[] | undefined>([]);
   pokemonGroups: PokemonGroup[] = [
@@ -80,65 +79,11 @@ export class AppComponent {
     },
   ];
 
-  get enabledPokemons(): string[] | null | undefined {
+  get enabledPokemons() {
     return this.pokemonGroups
       .filter((p) => !p.disabled)
       .map((p) => p.pokemon)
       .flat()
       .map((p) => p.value);
-  }
-
-  constructor() {
-    this.toppings.valueChanges.subscribe((v) => {
-      this.toppings.setValue(
-        v?.filter((v) => v !== 'select-all'),
-        { emitEvent: false, emitModelToViewChange: false }
-      );
-    });
-    this.pokemonControl.valueChanges.subscribe((v) => {
-      this.pokemonControl.setValue(
-        v?.filter((v) => v !== 'select-all'),
-        { emitEvent: false, emitModelToViewChange: false }
-      );
-      if (this.pokemonControl.value?.length === this.enabledPokemons?.length) {
-        this.selectAllPokemon?.select(false);
-      } else if (this.selectAllPokemon?.selected) {
-        this.selectAllPokemon?.deselect(false);
-      }
-    });
-  }
-
-  toggleAll(ev: MatOptionSelectionChange) {
-    if (ev.isUserInput) {
-      if (ev.source.selected) {
-        this.toppings.setValue(this.toppingList);
-      } else {
-        this.toppings.setValue([]);
-      }
-    }
-  }
-
-  toggleOption(ev: MatOptionSelectionChange) {
-    if (ev.isUserInput) {
-      if (!ev.source.selected) {
-        if (this.selectAll && this.selectAll.selected) {
-          this.selectAll.deselect(false);
-        }
-      } else {
-        if (this.toppings.value?.length === this.toppingList.length - 1) {
-          this.selectAll?.select(false);
-        }
-      }
-    }
-  }
-
-  toggleAllPokemon(ev: MatOptionSelectionChange) {
-    if (ev.isUserInput) {
-      if (ev.source.selected) {
-        this.pokemonControl.setValue(this.enabledPokemons);
-      } else {
-        this.pokemonControl.setValue([]);
-      }
-    }
   }
 }

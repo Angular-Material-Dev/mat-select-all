@@ -12,18 +12,17 @@
       }
     </mat-select-trigger>
     <mat-option
-      (onSelectionChange)="toggleAll($event)"
       value="select-all"
-      #selectAll
+      selectAll
+      [allValues]="toppingList"
       >Select all</mat-option
     >
     @for (topping of toppingList; track topping) {
-    <mat-option [value]="topping" (onSelectionChange)="toggleOption($event)">{{
-      topping
-    }}</mat-option>
+    <mat-option [value]="topping">{{ topping }}</mat-option>
     }
   </mat-select>
 </mat-form-field>
+{{ toppings.value | json }}
 <h2>Multi Select</h2>
 <mat-form-field>
   <mat-label>Pokemon</mat-label>
@@ -38,9 +37,9 @@
       }
     </mat-select-trigger>
     <mat-option
-      (onSelectionChange)="toggleAllPokemon($event)"
       value="select-all"
-      #selectAllPokemon
+      selectAll
+      [allValues]="enabledPokemons"
       >Select all</mat-option
     >
     @for (group of pokemonGroups; track group) {
@@ -57,3 +56,4 @@
     }
   </mat-select>
 </mat-form-field>
+{{ pokemonControl.value | json }}
