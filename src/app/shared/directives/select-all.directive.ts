@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
 })
 export class SelectAllDirective implements AfterViewInit, OnDestroy {
-  @Input() allValues: any[] = [];
+  @Input({ required: true }) allValues: any[] = [];
 
   private _matSelect = inject(MatSelect);
   private _matOption = inject(MatOption);

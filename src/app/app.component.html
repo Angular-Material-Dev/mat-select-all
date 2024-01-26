@@ -1,4 +1,4 @@
-<h2>Single Select</h2>
+<h2>Multiple Select</h2>
 <mat-form-field>
   <mat-label>Toppings</mat-label>
   <mat-select [formControl]="toppings" multiple>
@@ -22,8 +22,8 @@
     }
   </mat-select>
 </mat-form-field>
-{{ toppings.value | json }}
-<h2>Multi Select</h2>
+<!-- {{ toppings.value | json }} -->
+<h2>Group of options</h2>
 <mat-form-field>
   <mat-label>Pokemon</mat-label>
   <mat-select [formControl]="pokemonControl" multiple>
@@ -56,4 +56,4 @@
     }
   </mat-select>
 </mat-form-field>
-{{ pokemonControl.value | json }}
+<!-- {{ pokemonControl.value | json }} -->
